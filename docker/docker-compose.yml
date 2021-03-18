@@ -10,8 +10,6 @@ services:
       - ./db/scripts:/docker-entrypoint-initdb.d/:ro
       - ./db/vols:/data/db
     command: "--logpath=/dev/null"
-    env_file:
-      - ".env.common"
     environment:
       - MONGO_INITDB_DATABASE=$MONGODB_NAME
     #   - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USERNAME
