@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  mongo:
+    container_name: mv-db
+    image: mongo
+#    ports:
+#      - "${MONGODB_PORT}:${DOCKER_MONGODB_PORT}"
+    volumes:
+      - ./db/scripts:/docker-entrypoint-initdb.d/:ro
+      - ./db/vols:/data/db
+    command: "--logpath=/dev/null"
+    env_file:
+      - ".env.common"
+    environment:
+      - MONGO_INITDB_DATABASE=$MONGODB_NAME
+    #   - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USERNAME
+    #   - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
+    network_mode: host
+
+  api:
+    container_name: mv-api
+    build:
+      context: ../mv-api
+      dockerfile: ../docker/Dockerfile.api
+    depends_on:
+      - mongo
+    env_file:
+      - ".env.api"
+    network_mode: host
+
+  cron:
+    container_name: mv-cron
+    build:
+      context: ../mv-cron
+      dockerfile: ../docker/Dockerfile.cron
+    depends_on:
+      - mongo
+    env_file:
+      - ".env.cron"
+    network_mode: host
+    cap_add:
+      - SYS_ADMIN
+
+  front:
+    image: node:fermium-alpine3.10
+    container_name: mv-front
+    volumes:
+      - "../mv-front:/app"
+    working_dir: /app
+    env_file:
+      - ".env.front"
+    command: /bin/sh -c "npm install && npm start"
+    depends_on:
+      - api
+    network_mode: host
+
+  admin:
+    image: node:fermium-alpine3.10
+    container_name: mv-admin
+    volumes:
+      - "../mv-admin:/app"
+    working_dir: /app
+    command: /bin/sh -c "npm install && PORT=3001 npm start"
+    depends_on:
+      - api
+    network_mode: host

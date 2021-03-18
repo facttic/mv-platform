@@ -1,0 +1,12 @@
+[submodule "mv-front"]
+	path = mv-front
+	url = git@github.com:facttic/mv-front.git
+[submodule "mv-cron"]
+	path = mv-cron
+	url = git@github.com:facttic/mv-cron.git
+[submodule "mv-admin"]
+	path = mv-admin
+	url = git@github.com:facttic/mv-admin.git
+[submodule "mv-api"]
+	path = mv-api
+	url = git@github.com:facttic/mv-api.git
