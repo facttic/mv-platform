@@ -12,8 +12,8 @@ services:
     command: "--logpath=/dev/null"
     environment:
       - MONGO_INITDB_DATABASE=$MONGODB_NAME
-    #   - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USERNAME
-    #   - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
+      - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
     network_mode: host
 
   api:
@@ -25,6 +25,10 @@ services:
       - mongo
     env_file:
       - ".env.api"
+    environment:
+      - DB_USERNAME=$MONGODB_USERNAME
+      - DB_PASSWORD=$MONGODB_PASSWORD
+      - DB_AUTH=$MONGODB_AUTHDB
     network_mode: host
 
   cron:
