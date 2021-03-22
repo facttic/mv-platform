@@ -4,8 +4,8 @@ services:
   mongo:
     container_name: mv-db
     image: mongo
-#    ports:
-#      - "${MONGODB_PORT}:${DOCKER_MONGODB_PORT}"
+    ports:
+      - "${MONGODB_PORT}:${DOCKER_MONGODB_PORT}"
     volumes:
       - ./db/scripts:/docker-entrypoint-initdb.d/:ro
       - ./db/vols:/data/db
