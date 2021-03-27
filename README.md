@@ -99,7 +99,7 @@ $ docker system prune
 </details>
 
 ## How to run application parts?
-  - `docker-compose up api worker` for backend services only
+  - `docker-compose up api cron` for backend services only
   - `docker-compose up` for backend and frontend services
 
 

@@ -1,6 +1,19 @@
 version: "3"
 
 services:
+  redis:
+    container_name: mv-redis
+    image: "redis:alpine"
+    command: redis-server
+    ports:
+      - "6379:6379"
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+     - REDIS_REPLICATION_MODE=master
+    network_mode: host
+
   mongo:
     container_name: mv-db
     image: mongo
@@ -23,6 +36,7 @@ services:
       dockerfile: ../docker/Dockerfile.api
     depends_on:
       - mongo
+      - redis
     env_file:
       - ".env.api"
     environment:
@@ -38,6 +52,7 @@ services:
       dockerfile: ../docker/Dockerfile.cron
     depends_on:
       - mongo
+      - redis
     env_file:
       - ".env.cron"
     network_mode: host
