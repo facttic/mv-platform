@@ -6,19 +6,20 @@ services:
     image: "redis:alpine"
     command: redis-server
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT}:${DOCKER_REDIS_PORT}"
+      # - "127.0.0.1:6379:6379"
     volumes:
-      - $PWD/redis-data:/var/lib/redis
-      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+      - $PWD/redis/redis-data:/var/lib/redis
+      - $PWD/redis/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
      - REDIS_REPLICATION_MODE=master
-    # network_mode: host
 
   mongo:
     container_name: mv-db
     image: mongo
     ports:
       - "${MONGODB_PORT}:${DOCKER_MONGODB_PORT}"
+      # - "127.0.0.1:27017:27017"
     volumes:
       - ./db/scripts:/docker-entrypoint-initdb.d/:ro
       - ./db/vols:/data/db
@@ -27,7 +28,6 @@ services:
       - MONGO_INITDB_DATABASE=$MONGODB_NAME
       - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
-    # network_mode: host
 
   api:
     container_name: mv-api
