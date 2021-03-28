@@ -12,7 +12,7 @@ services:
       - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
      - REDIS_REPLICATION_MODE=master
-    network_mode: host
+    # network_mode: host
 
   mongo:
     container_name: mv-db
@@ -27,7 +27,7 @@ services:
       - MONGO_INITDB_DATABASE=$MONGODB_NAME
       - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
-    network_mode: host
+    # network_mode: host
 
   api:
     container_name: mv-api
