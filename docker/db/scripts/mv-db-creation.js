@@ -15,7 +15,7 @@ db.users.insert(
 
 db.manifestation.insert(
     {
-        "active" : true,
+        "active" : false,
         "metadata" : {
             "title" : "",
             "keywords" : "",
