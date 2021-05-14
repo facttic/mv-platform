@@ -1,12 +1,16 @@
 [submodule "mv-front"]
 	path = mv-front
 	url = https://github.com/facttic/mv-front
+	branch = main
 [submodule "mv-cron"]
 	path = mv-cron
 	url = https://github.com/facttic/mv-cron
+	branch = main
 [submodule "mv-admin"]
 	path = mv-admin
 	url = https://github.com/facttic/mv-admin
+	branch = main
 [submodule "mv-api"]
 	path = mv-api
 	url = https://github.com/facttic/mv-api
+	branch = main
