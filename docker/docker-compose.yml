@@ -1,25 +1,11 @@
 version: "3"
 
 services:
-  redis:
-    container_name: mv-redis
-    image: "redis:alpine"
-    command: redis-server
-    ports:
-      - "${REDIS_PORT}:${DOCKER_REDIS_PORT}"
-      # - "127.0.0.1:6379:6379"
-    volumes:
-      - $PWD/redis/redis-data:/var/lib/redis
-      - $PWD/redis/redis.conf:/usr/local/etc/redis/redis.conf
-    environment:
-     - REDIS_REPLICATION_MODE=master
-
   mongo:
     container_name: mv-db
     image: mongo
     ports:
-      - "${MONGODB_PORT}:${DOCKER_MONGODB_PORT}"
-      # - "127.0.0.1:27017:27017"
+      - ${MONGODB_PORT}:${DOCKER_MONGODB_PORT}
     volumes:
       - ./db/scripts:/docker-entrypoint-initdb.d/:ro
       - ./db/vols:/data/db
@@ -34,51 +20,56 @@ services:
     build:
       context: ../mv-api
       dockerfile: ../docker/Dockerfile.api
+    volumes:
+      - ./resources:/usr/src/app/server/public
     depends_on:
       - mongo
-      - redis
     env_file:
       - ".env.api"
     environment:
       - DB_USERNAME=$MONGODB_USERNAME
       - DB_PASSWORD=$MONGODB_PASSWORD
       - DB_AUTH=$MONGODB_AUTHDB
-    network_mode: host
 
   cron:
     container_name: mv-cron
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1024M
     build:
       context: ../mv-cron
       dockerfile: ../docker/Dockerfile.cron
     depends_on:
       - mongo
-      - redis
     env_file:
       - ".env.cron"
-    network_mode: host
+    environment:
+      - DB_USERNAME=$MONGODB_USERNAME
+      - DB_PASSWORD=$MONGODB_PASSWORD
+      - DB_AUTH=$MONGODB_AUTHDB
     cap_add:
       - SYS_ADMIN
 
-  front:
-    image: node:fermium-alpine3.10
-    container_name: mv-front
-    volumes:
-      - "../mv-front:/app"
-    working_dir: /app
-    env_file:
-      - ".env.front"
-    command: /bin/sh -c "npm install && npm start"
-    depends_on:
-      - api
-    network_mode: host
+ front:
+   image: node:fermium-alpine3.10
+   container_name: mv-front
+   volumes:
+     - "../mv-front:/app"
+   working_dir: /app
+   env_file:
+     - ".env.front"
+   command: /bin/sh -c "npm install && npm start"
+   depends_on:
+     - api
 
-  admin:
-    image: node:fermium-alpine3.10
-    container_name: mv-admin
-    volumes:
-      - "../mv-admin:/app"
-    working_dir: /app
-    command: /bin/sh -c "npm install && PORT=3001 npm start"
-    depends_on:
-      - api
-    network_mode: host
+ admin:
+   image: node:fermium-alpine3.10
+   container_name: mv-admin
+   volumes:
+     - "../mv-admin:/app"
+   working_dir: /app
+   command: /bin/sh -c "npm install && PORT=3001 npm start"
+   depends_on:
+     - api
