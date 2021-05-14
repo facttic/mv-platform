@@ -97,7 +97,7 @@ db.manifestation.insert(
         ],
         "config" : {
             "twitter" : {
-                "active" : true,
+                "active" : false,
                 "scheduleSchema" : "*/3 * * * *",
                 "maxTweets" : 1400,
                 "maxTweetsPerQuery" : 200,
@@ -109,7 +109,7 @@ db.manifestation.insert(
                 }
             },
             "instagram" : {
-                "active" : true,
+                "active" : false,
                 "scheduleSchema" : "*/4 * * * *",
                 "maxPosts" : 1400,
                 "impersonate" : {
