@@ -29,6 +29,8 @@ services:
 
   api:
     container_name: mv-api
+    ports:
+      - ${API_HOST_PORT}:${API_DOCKER_PORT}
     build:
       context: ../mv-api
       dockerfile: ../docker/Dockerfile.api
