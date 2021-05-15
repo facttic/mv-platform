@@ -53,11 +53,6 @@ services:
 
   cron:
     container_name: mv-cron
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 1024M
     build:
       context: ../mv-cron
       dockerfile: ../docker/Dockerfile.cron
